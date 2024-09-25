@@ -1,0 +1,60 @@
+# Custom Directories
+data/
+large_data/
+pgadmin_data/
+postgres_data/
+
+# Environment Files
+.env
+.venv/
+
+# macOS
+.DS_Store
+
+# Python Byte-compiled / Optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / Packaging
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+env/
+ENV/
+venv/
+ENV.bak/
+venv.bak/
+
+# Logs and Database Files
+*.log
+*.sqlite3
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Unit Test / Coverage Reports
+.tox/
+.nox/
+.coverage
+.coverage.*
+.pytest_cache/
+cache/
+
+# Python Tools
+.mypy_cache/
+.pyre/
+.pytest_cache/
+
+# IDE Files
+.idea/
+.vscode/
+.spyderproject
+.spyproject
+
+# Sphinx Documentation
+docs/_build/

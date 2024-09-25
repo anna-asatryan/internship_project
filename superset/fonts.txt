@@ -1,0 +1,36 @@
+# Global CSS settings for fonts and background
+CUSTOM_CSS = """
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: #f1f1f1; /* Light grey background */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+}
+
+p, span, div {
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+}
+
+
+# Enable custom CSS
+FEATURE_FLAGS['CUSTOM_CSS'] = CUSTOM_CSS
+
+
+# Viva colors CSS
+/* Viva Custom Chart Colors */
+.nv-series-0 {
+    fill: #e30613 !important; /* 4G */
+}
+.nv-series-1 {
+    fill: #eb2a32 !important; /* 3G */
+}
+.nv-series-2 {
+    fill: #f24d51 !important; /* 5G */
+}
+.nv-series-3 {
+    fill: #f86f70 !important; /* 2G */
+}

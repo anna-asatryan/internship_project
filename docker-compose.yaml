@@ -1,0 +1,82 @@
+services:
+
+  # PostgreSQL Database
+  db:
+    container_name: postgresql_db
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432  # Expose PostgreSQL port
+    environment:
+      - POSTGRES_USER=${DB_USER}  # Set PostgreSQL username
+      - POSTGRES_PASSWORD=${DB_PASSWORD}  # Set PostgreSQL password
+      - POSTGRES_DB=${DB_NAME}  # Set PostgreSQL database name
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]  # Healthcheck for PostgreSQL
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - ./postgres_data/pgdata:/var/lib/postgresql/data  # Persist PostgreSQL data
+
+  # pgAdmin for PostgreSQL management
+  pgadmin:  
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}  # Set pgAdmin default email
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}  # Set pgAdmin default password
+    ports:
+      - 5050:80  # Expose pgAdmin port for local browser
+    depends_on: 
+      - db  # pgAdmin depends on PostgreSQL
+    volumes:
+      - ./pgadmin_data/pgadmin:/var/lib/pgadmin  # Persist pgAdmin data
+
+  # Database setup
+  db_setup:
+    container_name: db_setup
+    build: ./etl
+    # restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      db:
+        condition: service_healthy  # Wait for PostgreSQL to be healthy before setting up
+    healthcheck:
+      test: "exit 0"
+
+  # jupyter notebooks setup
+  jupyter_notebooks:
+    container_name: jupyter_notebooks
+    build: ./model
+    # restart: always
+    ports:
+      - 8888:8888
+    volumes:
+      - ./model:/model
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: "exit 0"
+
+  #Setting up Apache
+  superset:
+      build:
+        context: ./superset
+        dockerfile: dockerfile
+        
+      container_name: Superset
+      environment:
+        - ADMIN_USERNAME=admin
+        - ADMIN_EMAIL=admin@superset.com
+        - ADMIN_PASSWORD=admin
+      volumes:
+        - ./superset_home:/app/superset_home
+      ports:
+        - '8088:8088'
+      depends_on:
+      - db
+
+
